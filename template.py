@@ -85,7 +85,6 @@ def Q5(dataframe):
 df = pd.read_csv('powergrid.csv')
 print("Q1", Q1(df))
 print("Q2", Q2(df))
-"""
 print("Q3", Q3(df))
 print("Q4", Q4(df))
-print("Q5", Q5(df))"""
+print("Q5", Q5(df))
