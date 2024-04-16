@@ -33,7 +33,7 @@ def Q1(dataframe):
 def Q2(dataframe):
 
     graph = {}
-    
+
     for a, b in dataframe.itertuples(index=False):
         if a not in graph:
             graph[a] = []
@@ -41,13 +41,21 @@ def Q2(dataframe):
             graph[b] = []
         graph[a].append(b)
         graph[b].append(a)
-    
-    
-    
-    print("---")
-    print(graph)
-    
-    return 0.0 # the average similarity score between neighbors
+
+    total_similarity = 0
+    count = 0
+    for node, neighbors in graph.items():
+        count += 1
+        for i in neighbors:
+            if(i<node):
+                continue
+            common_neighbors = set(neighbors) & set(graph[i])
+            total_neighbors = set(neighbors) | set(graph[i])
+            total_similarity += len(common_neighbors) / len(total_neighbors)
+
+    average_similarity = total_similarity / count
+
+    return average_similarity 
 
 # Directed graph
 # Task 3: PageRank
