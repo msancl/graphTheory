@@ -122,6 +122,18 @@ def Q4(dataframe):
     shortest_path_list = [0] * (max(shortest_path_count.keys())+1)
     for distance, count in shortest_path_count.items():
         shortest_path_list[distance] = count
+        
+    distances = range(1, len(shortest_path_list) + 1)
+    num_paths = shortest_path_list
+
+    plt.bar(distances, num_paths)
+    plt.xlabel('Distance')
+    plt.ylabel('Number of Paths')
+    plt.title('Number of Shortest Paths by Distance')
+    plt.yticks(range(0, int(max(num_paths))+1, int(max(num_paths)/10)))
+    plt.savefig('number_of_shortest_paths_by_distance.pdf', format='pdf')
+    plt.show()
+    
     return shortest_path_list # at index 0 the number of shortest paths of lenght 0, at index 1 the number of shortest paths of length 1, ...
     # Note that we will ignore the value at index 0 as it can be set to 0 or the number of nodes in the graph
 
