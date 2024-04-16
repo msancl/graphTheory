@@ -99,4 +99,39 @@ def create_graph(dataframe):
         graph[b].append(a)
 
     return graph
-    
+
+def create_unidirectional_graph(dataframe):
+    graph = {}
+    graph_reversed = {}
+
+    N = 0
+    for a, b in dataframe.itertuples(index=False):
+        if a not in graph:
+            graph[a] = []
+            graph_reversed[a] = []
+        if b not in graph:
+            graph[b] = []
+            graph_reversed[b] = []
+
+        graph[a].append(b)
+        graph_reversed[b].append(a)
+    return graph, graph_reversed
+
+
+
+
+def BFS(graph, start):
+    visited = set()
+    queue = [(start, 0)]
+    shortest_path_count = {}
+
+    while queue:
+        node, distance = queue.pop(0)
+        if node not in visited:
+            visited.add(node)
+            shortest_path_count[distance] = shortest_path_count.get(distance, 0) + 1
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    queue.append((neighbor, distance + 1))
+
+    return shortest_path_count
