@@ -57,11 +57,43 @@ def Q2(dataframe):
 
     return average_similarity 
 
+
+
+
+    
+
+
 # Directed graph
 # Task 3: PageRank
 def Q3(dataframe):
     # Your code here
-    return [0, 0.0] # the id of the node with the highest pagerank score, the associated pagerank value.
+    
+    
+    graph = {}
+    graph_reversed = {}
+
+    N = 0
+    for a, b in dataframe.itertuples(index=False):
+        if a not in graph:
+            graph[a] = []
+            graph_reversed[a] = []
+        if b not in graph:
+            graph[b] = []
+            graph_reversed[b] = []
+
+        graph[a].append(b)
+        graph_reversed[b].append(a)
+        if(N<a):
+            N = a
+        if(N<b):
+            N = b
+    
+    
+    print(graph[428], N)    
+    print(graph_reversed[428], N)
+    pr_biggest, pr_biggest_num = pagerank(graph, graph_reversed, N)
+    
+    return [pr_biggest_num, pr_biggest] # the id of the node with the highest pagerank score, the associated pagerank value.
     # Note that we consider that we reached convergence when the sum of the updates on all nodes after one iteration of PageRank is smaller than 10^(-6)
 
 # Undirected graph
@@ -81,8 +113,8 @@ def Q5(dataframe):
 
 df = pd.read_csv('powergrid.csv')
 # print("Q1", Q1(df))
-print("Q2",Q2(df))
-"""print("Q2", Q2(df))
+# print("Q2",Q2(df))
 print("Q3", Q3(df))
+"""
 print("Q4", Q4(df))
 print("Q5", Q5(df))"""
