@@ -3,6 +3,9 @@ import numpy as np
 import sys 
 import matplotlib.pyplot as plt
 from template_utils import *
+import networkx as nx
+
+
 
 sys.setrecursionlimit(6000)
 
@@ -16,17 +19,23 @@ def Q1(dataframe):
     
     mean = df['Connections'][1:].mean()
 
-   
-    plt.figure(figsize=(10, 5)) 
-    plt.bar(df.index[1:], df['Connections'][1:], color='blue')
-    plt.title('Degree of Each Node')
-    plt.xlabel(xlabel='Node Number')
-    plt.ylabel('Degree (Number of Connections)')
-    plt.grid(True)
+
+    plt.figure(figsize=(10, 5))
+    max_degree = df['Connections'][1:].max()
+    bins = range(0, max_degree + 2)
+    plt.hist(df['Connections'][1:], bins=bins, color='blue', edgecolor='black')
+    plt.title('Histogram of Degrees', fontsize=14)
+    plt.xlabel('Degree', fontsize=12)
+    plt.ylabel('Frequency', fontsize=12)
+    plt.savefig('histogram_of_degrees.pdf', format='pdf')
     plt.show()
 
-                        
-    return [mean, 0, 0] # [average degree, nb bridges, nb local bridges]
+    graph = create_graph(dataframe)
+
+    bridges = bridges_count(graph)
+    local_bridges = find_local_bridges(graph)
+
+    return [mean, bridges, local_bridges] # [average degree, nb bridges, nb local bridges]
 
 # Undirected graph
 # Task 2: Average similarity score between neighbors
@@ -127,10 +136,10 @@ def Q5(dataframe):
 
 # you can write additionnal functions that can be used in Q1-Q5 functions in the file "template_utils.py", a specific place is available to copy them at the end of the Inginious task.
 
+
 df = pd.read_csv('powergrid.csv')
-# print("Q1", Q1(df))
-# print("Q2",Q2(df))
+print("Q1", Q1(df))
+print("Q2", Q2(df))
 print("Q3", Q3(df))
 print("Q4", Q4(df))
-"""
-print("Q5", Q5(df))"""
+print("Q5", Q5(df))
