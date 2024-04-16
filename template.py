@@ -83,10 +83,8 @@ def Q3(dataframe):
 
         graph[a].append(b)
         graph_reversed[b].append(a)
-        if(N<a):
-            N = a
-        if(N<b):
-            N = b
+    
+    N = len(graph)
     
     
     print(graph[428], N)    
@@ -100,6 +98,24 @@ def Q3(dataframe):
 # Task 4: Small-world phenomenon
 def Q4(dataframe):
     # Your code here
+    
+    graph = {}
+
+    for a, b in dataframe.itertuples(index=False):
+        if a not in graph:
+            graph[a] = []
+        if b not in graph:
+            graph[b] = []
+        graph[a].append(b)
+        graph[b].append(a)
+    
+    N = len(graph)
+    
+
+            
+            
+         
+    
     return [0, 0, 0, 0, 0] # at index 0 the number of shortest paths of lenght 0, at index 1 the number of shortest paths of length 1, ...
     # Note that we will ignore the value at index 0 as it can be set to 0 or the number of nodes in the graph
 
@@ -115,6 +131,6 @@ df = pd.read_csv('powergrid.csv')
 # print("Q1", Q1(df))
 # print("Q2",Q2(df))
 print("Q3", Q3(df))
-"""
 print("Q4", Q4(df))
+"""
 print("Q5", Q5(df))"""
