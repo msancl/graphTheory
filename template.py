@@ -16,8 +16,8 @@ def Q1(dataframe):
     
     mean = df['Connections'][1:].mean()
 
-    # Plot the degree of each node
-    plt.figure(figsize=(10, 5))  # You might need to adjust this size depending on your specific needs
+   
+    plt.figure(figsize=(10, 5)) 
     plt.bar(df.index[1:], df['Connections'][1:], color='blue')
     plt.title('Degree of Each Node')
     plt.xlabel('Node Number')
