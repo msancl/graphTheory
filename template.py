@@ -20,7 +20,7 @@ def Q1(dataframe):
     plt.figure(figsize=(10, 5)) 
     plt.bar(df.index[1:], df['Connections'][1:], color='blue')
     plt.title('Degree of Each Node')
-    plt.xlabel('Node Number')
+    plt.xlabel(xlabel='Node Number')
     plt.ylabel('Degree (Number of Connections)')
     plt.grid(True)
     plt.show()
@@ -31,7 +31,22 @@ def Q1(dataframe):
 # Undirected graph
 # Task 2: Average similarity score between neighbors
 def Q2(dataframe):
-    # Your code here
+
+    graph = {}
+    
+    for a, b in dataframe.itertuples(index=False):
+        if a not in graph:
+            graph[a] = []
+        if b not in graph:
+            graph[b] = []
+        graph[a].append(b)
+        graph[b].append(a)
+    
+    
+    
+    print("---")
+    print(graph)
+    
     return 0.0 # the average similarity score between neighbors
 
 # Directed graph
@@ -57,7 +72,8 @@ def Q5(dataframe):
 # you can write additionnal functions that can be used in Q1-Q5 functions in the file "template_utils.py", a specific place is available to copy them at the end of the Inginious task.
 
 df = pd.read_csv('powergrid.csv')
-print("Q1", Q1(df))
+# print("Q1", Q1(df))
+print("Q2",Q2(df))
 """print("Q2", Q2(df))
 print("Q3", Q3(df))
 print("Q4", Q4(df))
