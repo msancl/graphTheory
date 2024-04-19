@@ -44,19 +44,37 @@ def Q2(dataframe):
 
     graph = create_graph(dataframe)
 
-    total_similarity = 0
-    count = 0
+    similarity_scores = []
+    num_neighbors = []
+
     for node, neighbors in graph.items():
-        count += 1
         for i in neighbors:
             if(i<node):
                 continue
             common_neighbors = set(neighbors) & set(graph[i])
             total_neighbors = set(neighbors) | set(graph[i])
-            total_similarity += len(common_neighbors) / len(total_neighbors)
+            sim_score = len(common_neighbors) / (len(total_neighbors)-2)
+            similarity_scores.append(sim_score)
 
-    average_similarity = total_similarity / count
 
+     
+    
+    average_similarity = np.sum(similarity_scores) / len(similarity_scores)
+    
+    similarity_scores.sort()
+    
+    print("similarity_scores: ",similarity_scores)
+
+    edge_percentage = np.linspace(0, 100, len(similarity_scores))
+
+    plt.plot(similarity_scores, edge_percentage)
+    plt.xlabel('Similarity Score')
+    plt.ylabel('Percentage of Edges')
+    plt.title('Percentage of Edges vs. the Similarity Score')
+    plt.savefig('percentage_of_edges_vs_the_similarity_score.pdf', format='pdf')
+    plt.show()
+    
+    
     return average_similarity 
 
 
@@ -86,20 +104,6 @@ def Q3(dataframe):
 
 
 
-def DFS(graph, start, end, visited=None):
-    if visited is None:
-        visited = set()
-    visited.add(start)
-    if start == end:
-        return [start]
-    for neighbor in graph[start]:
-        if neighbor not in visited:
-            path = DFS(graph, neighbor, end, visited)
-            if path is not None:
-                return [start] + path
-    return None
-
-
 
 # Undirected graph
 # Task 4: Small-world phenomenon
@@ -116,12 +120,16 @@ def Q4(dataframe):
             shortest_path_count[distance] = shortest_path_count.get(distance, 0) + count
     
     # shortest_path_count = {0: 4941, 1: 13188, 2: 32070, 3: 60992, 4: 104216, 5: 161518, 6: 231116, 7: 317050, 8: 417178, 9: 527538, 10: 643300, 11: 760572, 12: 876378, 13: 993332, 14: 1106938, 15: 1212646, 16: 1303336, 17: 1364872, 18: 1387570, 19: 1388020, 20: 1371436, 21: 1333408, 22: 1280458, 23: 1222186, 24: 1151852, 25: 1063390, 26: 944232, 27: 800454, 28: 648234, 29: 499750, 30: 366986, 31: 260126, 32: 179052, 33: 121462, 34: 84140, 35: 59208, 36: 42164, 37: 30202, 38: 20678, 39: 12908, 40: 7356, 41: 4008, 42: 1918, 43: 738, 44: 260, 45: 88, 46: 16}
-    print(shortest_path_count)  
     
     
     shortest_path_list = [0] * (max(shortest_path_count.keys())+1)
+    average_distance = 0
+    amount_of_paths = 0
     for distance, count in shortest_path_count.items():
         shortest_path_list[distance] = count
+        average_distance+=distance*count
+        amount_of_paths+=count
+    average_distance /= amount_of_paths
         
     distances = range(1, len(shortest_path_list) + 1)
     num_paths = shortest_path_list
@@ -133,6 +141,8 @@ def Q4(dataframe):
     plt.yticks(range(0, int(max(num_paths))+1, int(max(num_paths)/10)))
     plt.savefig('number_of_shortest_paths_by_distance.pdf', format='pdf')
     plt.show()
+    
+    print("avgdistances = ", np.average(average_distance))
     
     return shortest_path_list # at index 0 the number of shortest paths of lenght 0, at index 1 the number of shortest paths of length 1, ...
     # Note that we will ignore the value at index 0 as it can be set to 0 or the number of nodes in the graph
@@ -151,11 +161,10 @@ df = pd.read_csv('powergrid.csv')
 # print("Q2", Q2(df))
 # print("Q3", Q3(df))
 
-print([1,2,3,4,5,6].pop())
 start_time = time.time()
 
 print("Q4", Q4(df))
-print("Q5", Q5(df))
+# print("Q5", Q5(df))
 
 end_time = time.time()
 execution_time = end_time - start_time
