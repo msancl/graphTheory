@@ -150,21 +150,48 @@ def Q4(dataframe):
 # Undirected graph
 # Task 5: Betweenness centrality
 def Q5(dataframe):
-    # Your code here
-    return [0, 0.0] # the id of the node with the highest betweenness centrality, the associated betweenness centrality value.
+    graph = create_graph(dataframe)
+    centrality = {node: 0 for node in graph} 
+    nodes = list(graph.keys())  
+
+    for node in nodes:
+
+        shortest_paths = {}
+        queue = [(node, [node])]  
+        visited = set()
+        
+        while queue:
+            current, path = queue.pop(0)
+            if current not in visited:
+                visited.add(current)
+                if current not in shortest_paths or len(path) < len(shortest_paths[current]):
+                    shortest_paths[current] = path
+                for neighbor in graph[current]:
+                    if neighbor not in visited:
+                        queue.append((neighbor, path + [neighbor]))
+
+        for path in shortest_paths.values():
+            if len(path) > 2: 
+                for intermediate in path[1:-1]:
+                    centrality[intermediate] += 1
+
+    max_centrality_node = max(centrality, key=centrality.get)
+    max_centrality_value = centrality[max_centrality_node]
+
+    return [max_centrality_node, max_centrality_value]  # the id of the node with the highest betweenness centrality, the associated betweenness centrality value.
 
 # you can write additionnal functions that can be used in Q1-Q5 functions in the file "template_utils.py", a specific place is available to copy them at the end of the Inginious task.
 
 
 df = pd.read_csv('powergrid.csv')
-# print("Q1", Q1(df))
-# print("Q2", Q2(df))
-# print("Q3", Q3(df))
+print("Q1", Q1(df))
+print("Q2", Q2(df))
+print("Q3", Q3(df))
 
 start_time = time.time()
 
 print("Q4", Q4(df))
-# print("Q5", Q5(df))
+print("Q5", Q5(df))
 
 end_time = time.time()
 execution_time = end_time - start_time
